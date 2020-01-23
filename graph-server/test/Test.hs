@@ -1,6 +1,5 @@
 import Graph
 
-import Control.Exception
 import Data.List
 
 complete :: Int -> Graph
@@ -17,8 +16,19 @@ allComponentsInCompleteGraphAreFull n = and $ do
   i <- [1..n]
   pure (sort (component i (complete n)) == [1..n])
 
+line :: Int -> Graph
+line n = (n, [1]) : [(i, [i + 1]) | i <- [1..n - 1]]
+
+shortestPathInLineIsLine :: Int -> Bool
+shortestPathInLineIsLine n = case shortestPath 1 n (line n) of
+  Just xs -> xs == [1..n]
+  Nothing -> False
+
 tests :: Bool
-tests = and [allConnectedInCompleteGraph n && allComponentsInCompleteGraphAreFull n | n <- [1..500]]
+tests = and [allConnectedInCompleteGraph n 
+          && allComponentsInCompleteGraphAreFull n 
+          && shortestPathInLineIsLine n 
+          | n <- [1..20]]
 
 main :: IO ()
-main = assert tests $ pure ()
+main = if tests then return () else error "dang"
