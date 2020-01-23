@@ -16,6 +16,9 @@ library:
     - transformers
     - base
     - servant-server
+    - aeson
+    - wai-extra
+    - servant-client
   <<: *library
 
 executables:

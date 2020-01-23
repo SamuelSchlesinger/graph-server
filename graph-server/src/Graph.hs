@@ -15,7 +15,7 @@ component i graph = case lookup i graph of
 
 createVertex :: Graph -> (Int, Graph)
 createVertex graph = (m, (m, []) : graph) where
-  m = maximum (fst <$> graph) + 1 
+  m = foldr max (-1) (fst <$> graph) + 1
 
 createEdge :: Int -> Int -> Graph -> Graph
 createEdge i j graph = case lookup j graph of
