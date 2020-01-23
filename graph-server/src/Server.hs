@@ -1,13 +1,13 @@
 module Server where
 
-import Servant
 import API
-import Graph
-import Control.Monad.Reader
 import Control.Concurrent.STM
+import Control.Monad.Reader
+import Graph
+import Servant
 
 server :: ServerT API (ReaderT (TVar Graph) Handler)
-server = (dispatchEdge :<|> dispatchNode) :<|> (dispatchConnected :<|> dispatchNeighbors :<|> dispatchComponent) :<|> dispatchSnapshot where
+server = (dispatchEdge :<|> dispatchNode) :<|> (dispatchConnected :<|> dispatchNeighbors :<|> dispatchComponent :<|> dispatchShortestPath) :<|> dispatchSnapshot where
   dispatchEdge (i, j) = do
     graphVar <- ask
     liftIO $ atomically $ do
@@ -37,4 +37,9 @@ server = (dispatchEdge :<|> dispatchNode) :<|> (dispatchConnected :<|> dispatchN
   dispatchSnapshot = do
     graphVar <- ask
     liftIO $ atomically $ readTVar graphVar
+  dispatchShortestPath (i, j) = do
+    graphVar <- ask
+    liftIO $ atomically $ do
+      graph <- readTVar graphVar
+      return $ shortestPath i j graph
       

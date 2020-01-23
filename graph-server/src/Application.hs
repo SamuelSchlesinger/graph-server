@@ -1,11 +1,11 @@
 module Application where
 
-import Server
 import API
-import Servant
 import Control.Concurrent.STM
 import Control.Monad.Reader
 import Network.Wai.Middleware.RequestLogger
+import Servant
+import Server
 
 app :: IO Application
 app = logStdoutDev <$> do

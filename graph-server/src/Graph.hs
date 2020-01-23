@@ -1,6 +1,8 @@
 module Graph where
 
 import Data.List
+import Data.Maybe
+
 type Graph = [(Int, [Int])]
 
 connected :: Int -> Int -> Graph -> Bool
@@ -24,3 +26,11 @@ createEdge i j graph = case lookup j graph of
 
 neighbors :: Int -> Graph -> [Int]
 neighbors i graph = maybe [] id (lookup i graph)
+
+shortestPath :: Int -> Int -> Graph -> Maybe [Int]
+shortestPath i j graph | i == j = Just [i]
+                       | otherwise = case lookup i graph of
+  Just iadj -> case catMaybes $ map (\i' -> (i :) <$> shortestPath i' j (filter ((/= i) . fst) graph)) iadj of
+                 [] -> Nothing
+                 xs -> Just $ minimumBy (\x y -> compare (length x) (length y)) xs
+  Nothing -> Nothing

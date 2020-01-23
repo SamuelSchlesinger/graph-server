@@ -10,15 +10,15 @@ library:
   source-dirs:
     - src
   dependencies:
-    - wai
-    - stm
-    - mtl
-    - transformers
-    - base
-    - servant-server
     - aeson
-    - wai-extra
+    - base
+    - mtl
     - servant-client
+    - servant-server
+    - stm
+    - transformers
+    - wai
+    - wai-extra
   <<: *library
 
 executables:
