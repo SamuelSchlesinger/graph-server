@@ -7,7 +7,7 @@ import Control.Monad.Reader
 import Control.Concurrent.STM
 
 server :: ServerT API (ReaderT (TVar Graph) Handler)
-server = (dispatchEdge :<|> dispatchNode) :<|> (dispatchConnected :<|> dispatchNeighbors :<|> dispatchComponent) where
+server = (dispatchEdge :<|> dispatchNode) :<|> (dispatchConnected :<|> dispatchNeighbors :<|> dispatchComponent) :<|> dispatchSnapshot where
   dispatchEdge (i, j) = do
     graphVar <- ask
     liftIO $ atomically $ do
@@ -34,3 +34,7 @@ server = (dispatchEdge :<|> dispatchNode) :<|> (dispatchConnected :<|> dispatchN
     liftIO $ atomically $ do
       graph <- readTVar graphVar
       return $ component i graph
+  dispatchSnapshot = do
+    graphVar <- ask
+    liftIO $ atomically $ readTVar graphVar
+      
