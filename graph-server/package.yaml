@@ -1,6 +1,6 @@
 _common: !include "../shared.yaml"
 
-name: package
+name: graph-server
 <<: *common
 
 dependencies:
@@ -10,7 +10,12 @@ library:
   source-dirs:
     - src
   dependencies:
+    - wai
+    - stm
+    - mtl
+    - transformers
     - base
+    - servant-server
   <<: *library
 
 executables:
@@ -18,7 +23,8 @@ executables:
     main: Main.hs
     source-dirs: app
     dependencies:
-      - package
+      - warp
+      - graph-server
     <<: *executable
 
 tests:
@@ -26,5 +32,5 @@ tests:
     main: Test.hs
     source-dirs: test
     dependencies:
-      - package
+      - graph-server
     <<: *test
